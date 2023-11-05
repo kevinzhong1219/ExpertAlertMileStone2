@@ -5,11 +5,14 @@ import org.json.JSONObject;
 
 import java.io.Serializable;
 
-public class Grocery implements Serializable {
+public class Grocery{
     private String name;
     private String date;
     private String description;
     private String imageId;
+
+    public Grocery() {
+    }
 
     public String getName() {
         return name;
@@ -40,7 +43,7 @@ public class Grocery implements Serializable {
     }
 
     public void setImageId() {
-        this.imageId = this.name + this.date + System.currentTimeMillis();
+        this.imageId = this.name + System.currentTimeMillis() + ".jpeg";
     }
 
     @Override
@@ -56,7 +59,7 @@ public class Grocery implements Serializable {
     public String toJsonFormat(){
         JSONObject obj = new JSONObject();
         try {
-            obj.put("Name", name);
+            obj.put("name", name);
             obj.put("date", date);
             obj.put("description", description);
             obj.put("imageId", imageId);

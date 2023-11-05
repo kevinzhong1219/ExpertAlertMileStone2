@@ -2,21 +2,10 @@
     <string name="app_name">ExpertAlert</string>
     <string name="action_settings">Settings</string>
     <!-- Strings used for fragments for navigation -->
-    <string name="first_fragment_label">First Fragment</string>
-    <string name="second_fragment_label">Second Fragment</string>
+    <string name="first_fragment_label">Inventory</string>
+    <string name="second_fragment_label">Add an item</string>
     <string name="Products_Button_text">Products</string>
     <string name="Back_button_text">Back</string>
-
-    <string name="Hello_World">
-        Hello World!Hello World!Hello World!Hello World!Hello World!Hello World!Hello World!Hello World!
-        Hello World!Hello World!Hello World!Hello World!Hello World!Hello World!Hello World!Hello World!
-        Hello World!Hello World!Hello World!Hello World!Hello World!Hello World!Hello World!Hello World!
-        Hello World!Hello World!Hello World!Hello World!Hello World!Hello World!Hello World!Hello World!
-        Hello World!Hello World!Hello World!Hello World!Hello World!Hello World!Hello World!Hello World!
-
-
-
-    </string>
     <string name="Add_Button_text">Add</string>
     <string name="Button_Setting_text">Setting</string>
 </resources>

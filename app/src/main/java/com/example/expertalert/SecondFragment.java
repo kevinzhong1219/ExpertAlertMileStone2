@@ -15,23 +15,24 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.expertalert.databinding.FragmentSecondBinding;
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
-import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
 public class SecondFragment extends Fragment {
     private FragmentSecondBinding binding;
     private static final String FILE_NAME = "Inventory.json";
-
-//    private String name;
-//    private String date;
-//    private String description;
     private Bitmap bitmap;
-    private Grocery grocery = new Grocery();
+    private List<Grocery> inventory = new ArrayList<>();
 
     @Override
     public View onCreateView(
@@ -44,6 +45,11 @@ public class SecondFragment extends Fragment {
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        if (getActivity() instanceof MainActivity) {
+            MainActivity mainActivity = (MainActivity) getActivity();
+            inventory = mainActivity.getInventory();
+        }
 
         binding.buttonChooseImage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -58,59 +64,48 @@ public class SecondFragment extends Fragment {
         binding.buttonSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Grocery grocery = new Grocery();
                 grocery.setName(binding.nameInput.getText().toString());
                 grocery.setDate(binding.dateInput.getText().toString());
                 grocery.setDescription(binding.descriptionInput.getText().toString());
                 grocery.setImageId();
-                save(view);
+                inventory.add(grocery);
+                save(view, grocery);
+                binding.nameInput.setText("");
+                binding.dateInput.setText("");
+                binding.descriptionInput.setText("");
+                binding.imagePreview.setImageResource(R.drawable.baseline_photo_camera_24);
             }
         });
-
-        binding.buttonBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                NavHostFragment.findNavController(SecondFragment.this)
-                        .navigate(R.id.action_SecondFragment_to_FirstFragment);
-            }
-        });
-
-
     }
-    public void save(View v){
+    public void save(View view, Grocery grocery){
         FileOutputStream fos = null;
         try{
             fos = getActivity().openFileOutput(FILE_NAME, getActivity().MODE_PRIVATE);
-            ObjectOutputStream os = new ObjectOutputStream(fos);
-            updateJsonFile(os);
-//            os.writeObject(grocery.toJson());
-//            Toast.makeText(getActivity(), "Saved to file:  " + getActivity().getFilesDir() + '/' + FILE_NAME, Toast.LENGTH_LONG).show();
+            updateJsonFile(fos);
 
-            fos = getActivity().openFileOutput(grocery.getImageId() + ".JPEG", getActivity().MODE_PRIVATE);
-            os = new ObjectOutputStream(fos);
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, os);
-            os.close();
+            if(bitmap != null){
+                fos = getActivity().openFileOutput(grocery.getImageId(), getActivity().MODE_PRIVATE);
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+            }
+
+            fos.flush();
             fos.close();
             Toast.makeText(getActivity(), "Inventory Saved", Toast.LENGTH_LONG).show();
-        } catch(FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e){
-            e.printStackTrace();
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 
-    public void updateJsonFile(ObjectOutputStream os){
-        List<Grocery> inventory = new ArrayList<>();
-        if (getActivity() instanceof MainActivity) {
-            MainActivity mainActivity = (MainActivity) getActivity();
-            inventory = mainActivity.getInventory();
-        }
-
+    public void updateJsonFile(FileOutputStream fos){
         try {
-            os.writeObject("{\"inventory\": [");
+            fos.write(("{\"inventory\": [").getBytes());
             for(int i = 0; i < inventory.size() - 1; i++){
-                os.writeObject(inventory.get(i).toJsonFormat() + ",");
+                fos.write((inventory.get(i).toJsonFormat() + ",").getBytes());
             }
-            os.writeObject(inventory.get(inventory.size() - 1).toJsonFormat() + "]}");
+            fos.write((inventory.get(inventory.size() - 1).toJsonFormat() + "]}").getBytes());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
