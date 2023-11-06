@@ -8,10 +8,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
+
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -71,19 +70,6 @@ public class FirstFragment extends Fragment {
                         .navigate(R.id.action_FirstFragment_to_SecondFragment);
             }
         });
-
-//        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                Grocery selectedGrocery = inventory.get(position);
-//                Bundle args = new Bundle();
-//                args.putParcelable("selectedGrocery", selectedGrocery);
-//                //getParentFragmentManager().findFragmentById(R.id.ThirdFragment).setArguments(args);
-//
-//                NavHostFragment.findNavController(FirstFragment.this)
-//                        .navigate(R.id.action_FirstFragment_to_ThirdFragment);
-//            }
-//        });
 
         binding.buttonUpload.setOnClickListener(new View.OnClickListener() {
             @Override

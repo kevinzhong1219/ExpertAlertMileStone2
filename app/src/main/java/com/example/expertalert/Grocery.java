@@ -8,7 +8,6 @@ import androidx.annotation.NonNull;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.Serializable;
 
 public class Grocery implements Parcelable {
     private String name;
