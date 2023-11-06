@@ -57,7 +57,6 @@ public class SecondFragment extends Fragment {
                 Intent data = new Intent(Intent.ACTION_PICK);
                 data.setData(MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 startActivityForResult(data, 1000);
-
             }
         });
 
@@ -70,7 +69,7 @@ public class SecondFragment extends Fragment {
                 grocery.setDescription(binding.descriptionInput.getText().toString());
                 grocery.setImageId();
                 inventory.add(grocery);
-                save(view, grocery);
+                save(grocery);
                 binding.nameInput.setText("");
                 binding.dateInput.setText("");
                 binding.descriptionInput.setText("");
@@ -78,7 +77,7 @@ public class SecondFragment extends Fragment {
             }
         });
     }
-    public void save(View view, Grocery grocery){
+    public void save(Grocery grocery){
         FileOutputStream fos = null;
         try{
             fos = getActivity().openFileOutput(FILE_NAME, getActivity().MODE_PRIVATE);

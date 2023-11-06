@@ -1,17 +1,29 @@
 package com.example.expertalert;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import androidx.annotation.NonNull;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.Serializable;
 
-public class Grocery{
+public class Grocery implements Parcelable {
     private String name;
     private String date;
     private String description;
     private String imageId;
 
     public Grocery() {
+    }
+
+    protected Grocery(Parcel in) {
+        name = in.readString();
+        date = in.readString();
+        description = in.readString();
+        imageId = in.readString();
     }
 
     public String getName() {
@@ -55,6 +67,31 @@ public class Grocery{
                 ", imageId='" + imageId + '\'' +
                 '}';
     }
+
+    @Override
+    public int describeContents() {
+        return 0; // Return 0 if you don't have any special flags to describe
+    }
+
+    @Override
+    public void writeToParcel(@NonNull Parcel dest, int flags) {
+        dest.writeString(name);
+        dest.writeString(date);
+        dest.writeString(description);
+        dest.writeString(imageId);
+    }
+
+    public static final Parcelable.Creator<Grocery> CREATOR = new Parcelable.Creator<Grocery>() {
+        @Override
+        public Grocery createFromParcel(Parcel in) {
+            return new Grocery(in);
+        }
+
+        @Override
+        public Grocery[] newArray(int size) {
+            return new Grocery[size];
+        }
+    };
 
     public String toJsonFormat(){
         JSONObject obj = new JSONObject();

@@ -60,7 +60,7 @@ public class FirstFragment extends Fragment {
 
         initialLists();
 
-        CustomBaseAdapter customBaseAdapter = new CustomBaseAdapter(getContext(), inventory, images);
+        CustomBaseAdapter customBaseAdapter = new CustomBaseAdapter(getActivity(), getContext(), inventory, images);
         listView.setAdapter(customBaseAdapter);
 
         binding.buttonAdd.setOnClickListener(new View.OnClickListener() {
@@ -71,11 +71,23 @@ public class FirstFragment extends Fragment {
             }
         });
 
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                Grocery selectedGrocery = inventory.get(position);
+//                Bundle args = new Bundle();
+//                args.putParcelable("selectedGrocery", selectedGrocery);
+//                //getParentFragmentManager().findFragmentById(R.id.ThirdFragment).setArguments(args);
+//
+//                NavHostFragment.findNavController(FirstFragment.this)
+//                        .navigate(R.id.action_FirstFragment_to_ThirdFragment);
+//            }
+//        });
+
+        binding.buttonUpload.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Grocery selectedGrocery = inventory.get(position);
-                Toast.makeText(getActivity(), selectedGrocery.getName() + " selected", Toast.LENGTH_LONG).show();
+            public void onClick(View v) {
+
             }
         });
     }

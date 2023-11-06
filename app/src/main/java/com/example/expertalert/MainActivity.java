@@ -1,6 +1,9 @@
 package com.example.expertalert;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -29,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
     private AppBarConfiguration appBarConfiguration;
     private ActivityMainBinding binding;
     private List<Grocery> inventory = new ArrayList<>();
+    private List<Bitmap> images = new ArrayList<>();
     private static final String FILE_NAME = "Inventory.json";
 
     @Override
@@ -44,16 +48,7 @@ public class MainActivity extends AppCompatActivity {
         appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph()).build();
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
 
-        initialInventory();
-
-//        binding.fab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAnchorView(R.id.fab)
-//                        .setAction("Action", null).show();
-//            }
-//        });
+        initialLists();
     }
 
     @Override
@@ -63,21 +58,6 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        // Handle action bar item clicks here. The action bar will
-//        // automatically handle clicks on the Home/Up button, so long
-//        // as you specify a parent activity in AndroidManifest.xml.
-//        int id = item.getItemId();
-//
-//        //noinspection SimplifiableIfStatement
-//        if (id == R.id.action_settings) {
-//            return true;
-//        }
-//
-//        return super.onOptionsItemSelected(item);
-//    }
-
     @Override
     public boolean onSupportNavigateUp() {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
@@ -85,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
                 || super.onSupportNavigateUp();
     }
 
-    public void initialInventory(){
+    public void initialLists(){
         Gson gson = new Gson();
         try {
             File file = new File(getApplicationContext().getFilesDir(), FILE_NAME);
@@ -98,14 +78,32 @@ public class MainActivity extends AppCompatActivity {
                 inventory.add(grocery);
             }
             inventory.sort(new DateComparator());
+
+            for(Grocery grocery : inventory){
+                initialImage(grocery.getImageId());
+            }
         }
         catch (IOException e) {
             System.out.println("Could not read the file:" + e);
         }
     }
 
+    public void initialImage(String fileName){
+        File file = new File(getApplicationContext().getFilesDir(), fileName);
+        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.baseline_disabled_by_default_24);
+        if(file.exists()){
+            bitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
+        }
+        Log.d("TAG", "File path: " + file.getAbsolutePath());
+        images.add(bitmap);
+    }
+
 
     public List<Grocery> getInventory() {
         return inventory;
+    }
+
+    public List<Bitmap> getImages() {
+        return images;
     }
 }
