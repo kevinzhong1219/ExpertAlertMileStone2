@@ -1,5 +1,6 @@
 package com.example.expertalert;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -88,6 +89,20 @@ public class FirstFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
+            }
+        });
+
+        binding.buttonShare.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setAction(Intent.ACTION_SEND);
+                intent.putExtra(Intent.EXTRA_TEXT, inventory.toString());
+                intent.setType("text/plain");
+
+                if(intent.resolveActivity(getActivity().getPackageManager()) != null){
+                    startActivity(intent);
+                }
             }
         });
     }
